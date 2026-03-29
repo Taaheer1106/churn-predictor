@@ -22,7 +22,7 @@ export interface PredictionResult {
 export class PredictService {
 
   // The Flask API URL — change this to your Heroku URL when deploying
-  private apiUrl = 'http://127.0.0.1:5000';
+  private apiUrl = 'https://churn-predictor-716z.onrender.com';
 
   // HttpClient is injected automatically by Angular — we use it to make API calls
   constructor(private http: HttpClient) {}

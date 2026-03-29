@@ -69,7 +69,7 @@ export class HistoryComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.http.get<HistoryRecord[]>('http://127.0.0.1:5000/history').subscribe({
+    this.http.get<HistoryRecord[]>('https://churn-predictor-716z.onrender.com/history').subscribe({
       next: (data) => {
         this.records = data;
         this.filteredRecords = data;
