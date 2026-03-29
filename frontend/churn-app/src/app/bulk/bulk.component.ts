@@ -54,12 +54,12 @@ export class BulkComponent {
     const formData = new FormData();
     formData.append('file', file);
 
-    this.http.post<BulkResult[]>('http://127.0.0.1:5000/predict/bulk', formData).subscribe({
+    this.http.post<BulkResult[]>('https://churn-predictor-716z.onrender.com/predict/bulk', formData).subscribe({
       next: (data) => {
         this.results.set(data);
         this.loading.set(false);
       },
-      error: (err) => {
+      error: () => {
         this.errorMsg.set('Failed to process file. Make sure it has the correct columns.');
         this.loading.set(false);
       }
