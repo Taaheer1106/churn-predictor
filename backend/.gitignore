@@ -1,4 +1,4 @@
 .env
-churn_model.pkl
+# churn_model.pkl is committed so Render can load it without retraining
 __pycache__/
 *.pyc
