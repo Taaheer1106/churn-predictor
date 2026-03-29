@@ -1,0 +1,4 @@
+.env
+churn_model.pkl
+__pycache__/
+*.pyc
