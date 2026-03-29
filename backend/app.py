@@ -66,9 +66,24 @@ def save_prediction(data, probability, risk_level, explanation, customer_name=No
 # ─────────────────────────────────────────────
 
 # Load once when the server starts — not on every request (that would be slow)
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'churn_model.pkl')
-with open(MODEL_PATH, 'rb') as f:  # 'rb' = read binary
-    model = pickle.load(f)
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'churn_model.pkl')
+
+def train_model():
+    import subprocess, sys
+    print("Training model...")
+    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model.py')
+    subprocess.run([sys.executable, script], check=True)
+    print("Training complete.")
+
+try:
+    with open(MODEL_PATH, 'rb') as f:
+        model = pickle.load(f)
+    print("Model loaded successfully.")
+except Exception as e:
+    print(f"Could not load model ({e}), retraining...")
+    train_model()
+    with open(MODEL_PATH, 'rb') as f:
+        model = pickle.load(f)
 
 
 # ─────────────────────────────────────────────
