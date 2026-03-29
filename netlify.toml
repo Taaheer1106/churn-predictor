@@ -1,0 +1,4 @@
+[build]
+  base = "frontend/churn-app"
+  publish = "dist/churn-app/browser"
+  command = "npm run build"
