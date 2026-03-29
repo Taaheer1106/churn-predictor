@@ -3,6 +3,7 @@ scikit-learn
 flask
 flask-cors
 openai
+groq
 psycopg2-binary
 gunicorn
 python-dotenv
