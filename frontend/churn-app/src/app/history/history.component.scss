@@ -7,6 +7,8 @@
   padding: 20px 32px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.2);
 
+  @media (max-width: 768px) { padding: 14px 16px; }
+
   .header-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -14,19 +16,36 @@
     align-items: center;
     gap: 16px;
 
-    .header-icon { font-size: 36px; }
+    .header-icon {
+      font-size: 36px;
+      @media (max-width: 480px) { display: none; }
+    }
 
-    h1 { margin: 0; font-size: 24px; font-weight: 700; }
-    p  { margin: 2px 0 0; font-size: 13px; opacity: 0.8; }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      @media (max-width: 480px) { font-size: 18px; }
+    }
+    p  {
+      margin: 2px 0 0;
+      font-size: 13px;
+      opacity: 0.8;
+      @media (max-width: 480px) { display: none; }
+    }
 
     .header-nav {
       margin-left: auto;
       display: flex;
       gap: 8px;
 
+      @media (max-width: 768px) { gap: 4px; }
+
       .nav-link {
         color: rgba(255,255,255,0.75);
         font-size: 14px;
+
+        @media (max-width: 768px) { font-size: 12px; padding: 4px 8px; }
 
         &.active {
           color: white;
@@ -58,6 +77,8 @@
   max-width: 1200px;
   margin: 28px auto;
   padding: 0 20px;
+
+  @media (max-width: 768px) { padding: 0 12px; margin: 16px auto; }
 }
 
 .page-title-row {
@@ -67,6 +88,11 @@
   flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   .title-left {
     h2 { margin: 0 0 4px; font-size: 22px; font-weight: 700; color: #1a237e; }
@@ -78,7 +104,12 @@
     align-items: center;
     gap: 12px;
 
-    .filter-select { width: 160px; }
+    @media (max-width: 600px) { width: 100%; }
+
+    .filter-select {
+      width: 160px;
+      @media (max-width: 600px) { flex: 1; }
+    }
 
     .clear-btn {
       color: #f44336;
@@ -124,6 +155,11 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 }
 
 .stat-card {
@@ -158,7 +194,7 @@
 // ═══════════════════════════════════════════
 .table-card {
   border-radius: 12px !important;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
   padding: 0 !important;
 }
