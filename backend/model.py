@@ -16,7 +16,14 @@ import pickle
 # STEP 2: Load the dataset
 # ─────────────────────────────────────────────
 
-df = pd.read_csv('../WA_Fn-UseC_-Telco-Customer-Churn.csv')
+import os
+
+# Look for dataset in current dir or parent dir (local dev)
+DATASET = 'WA_Fn-UseC_-Telco-Customer-Churn.csv'
+if not os.path.exists(DATASET):
+    DATASET = '../WA_Fn-UseC_-Telco-Customer-Churn.csv'
+
+df = pd.read_csv(DATASET)
 print(f"Dataset shape: {df.shape}")
 
 

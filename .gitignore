@@ -14,5 +14,4 @@ dist/
 .vscode/
 .idea/
 
-# Dataset (large file)
-WA_Fn-UseC_-Telco-Customer-Churn.csv
+# Dataset included in repo for Render deployment
