@@ -128,7 +128,8 @@ print(f"\nBest model: {best_name} (AUC-ROC: {best_auc:.4f})")
 # STEP 8: Save the best model
 # ─────────────────────────────────────────────
 
-with open('churn_model.pkl', 'wb') as f:
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'churn_model.pkl')
+with open(MODEL_PATH, 'wb') as f:
     pickle.dump(best_model, f)
 
 print(f"Model saved as churn_model.pkl")

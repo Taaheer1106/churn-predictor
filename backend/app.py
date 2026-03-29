@@ -66,7 +66,8 @@ def save_prediction(data, probability, risk_level, explanation, customer_name=No
 # ─────────────────────────────────────────────
 
 # Load once when the server starts — not on every request (that would be slow)
-with open('churn_model.pkl', 'rb') as f:  # 'rb' = read binary
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'churn_model.pkl')
+with open(MODEL_PATH, 'rb') as f:  # 'rb' = read binary
     model = pickle.load(f)
 
 
