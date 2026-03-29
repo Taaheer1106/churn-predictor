@@ -261,7 +261,7 @@
         </div>
 
         <button mat-raised-button class="predict-btn" type="submit"
-          [disabled]="form.invalid || loading()" (click)="onSubmit()">
+          [disabled]="form.invalid || loading()">
           @if (loading()) {
             <mat-spinner diameter="20" color="accent"></mat-spinner>
             <span>Analyzing...</span>

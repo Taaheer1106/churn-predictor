@@ -295,6 +295,8 @@
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+
+    .full-width { margin-bottom: 8px; }
   }
 }
 
