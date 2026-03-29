@@ -33,7 +33,7 @@ def get_db_connection():
     conn = psycopg2.connect(os.getenv('DATABASE_URL'))
     return conn
 
-def save_prediction(data, probability, risk_level, explanation, customer_name=None):
+def save_prediction(data, probability, risk_level, explanation, customer_name=None, user_id=None):
     # Saves one prediction record to the database
     try:
         conn = get_db_connection()
@@ -41,8 +41,8 @@ def save_prediction(data, probability, risk_level, explanation, customer_name=No
         cur.execute("""
             INSERT INTO predictions
                 (customer_name, tenure, contract, monthly_charges, total_charges,
-                 churn_probability, risk_level, explanation)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                 churn_probability, risk_level, explanation, user_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             customer_name if customer_name else None,
             int(data.get('tenure')),
@@ -51,7 +51,8 @@ def save_prediction(data, probability, risk_level, explanation, customer_name=No
             float(data.get('TotalCharges')),
             float(round(probability * 100, 1)),
             risk_level,
-            explanation
+            explanation,
+            user_id
         ))
         conn.commit()
         cur.close()
@@ -242,9 +243,10 @@ def predict():
             print(f"Groq error (using fallback): {ai_error}")
             explanation = get_fallback_explanation(data, probability, risk_level)
 
-        # Save to PostgreSQL (extract optional customer name first)
+        # Save to PostgreSQL (extract optional customer name and user_id first)
         customer_name = str(data.get('customer_name', '') or '').strip() or None
-        save_prediction(data, probability, risk_level, explanation, customer_name)
+        user_id = str(data.get('user_id', '') or '').strip() or None
+        save_prediction(data, probability, risk_level, explanation, customer_name, user_id)
 
         # Send the result back to Angular as JSON
         return jsonify({
@@ -330,14 +332,25 @@ def history():
         conn = get_db_connection()
         cur = conn.cursor()
 
-        # Fetch last 50 predictions, newest first
-        cur.execute("""
-            SELECT id, customer_name, tenure, contract, monthly_charges, total_charges,
-                   churn_probability, risk_level, explanation, created_at
-            FROM predictions
-            ORDER BY created_at DESC
-            LIMIT 50
-        """)
+        user_id = request.args.get('user_id')
+
+        if user_id:
+            cur.execute("""
+                SELECT id, customer_name, tenure, contract, monthly_charges, total_charges,
+                       churn_probability, risk_level, explanation, created_at
+                FROM predictions
+                WHERE user_id = %s
+                ORDER BY created_at DESC
+                LIMIT 50
+            """, (user_id,))
+        else:
+            cur.execute("""
+                SELECT id, customer_name, tenure, contract, monthly_charges, total_charges,
+                       churn_probability, risk_level, explanation, created_at
+                FROM predictions
+                ORDER BY created_at DESC
+                LIMIT 50
+            """)
 
         rows = cur.fetchall()
         cur.close()
@@ -372,9 +385,13 @@ def history():
 @app.route('/history/<int:prediction_id>', methods=['DELETE'])
 def delete_prediction(prediction_id):
     try:
+        user_id = request.args.get('user_id')
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("DELETE FROM predictions WHERE id = %s", (prediction_id,))
+        if user_id:
+            cur.execute("DELETE FROM predictions WHERE id = %s AND user_id = %s", (prediction_id, user_id))
+        else:
+            cur.execute("DELETE FROM predictions WHERE id = %s", (prediction_id,))
         conn.commit()
         cur.close()
         conn.close()
@@ -390,9 +407,13 @@ def delete_prediction(prediction_id):
 @app.route('/history', methods=['DELETE'])
 def clear_history():
     try:
+        user_id = request.args.get('user_id')
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("DELETE FROM predictions")
+        if user_id:
+            cur.execute("DELETE FROM predictions WHERE user_id = %s", (user_id,))
+        else:
+            cur.execute("DELETE FROM predictions")
         conn.commit()
         cur.close()
         conn.close()

@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -62,14 +61,13 @@ export class HistoryComponent implements OnInit {
   ];
 
   constructor(
-    private http: HttpClient,
     private cdr: ChangeDetectorRef,
     private predictService: PredictService,
     public theme: ThemeService
   ) {}
 
   ngOnInit() {
-    this.http.get<HistoryRecord[]>('https://churn-predictor-716z.onrender.com/history').subscribe({
+    this.predictService.getHistory().subscribe({
       next: (data) => {
         this.records = data;
         this.filteredRecords = data;

@@ -5,39 +5,40 @@
 // ─────────────────────────────────────────────
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';   // Built-in Angular tool to make HTTP requests
-import { Observable } from 'rxjs';                   // Represents a future value (like a Promise)
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserService } from './user.service';
 
-// PredictionResult defines the shape of the response we expect from Flask
 export interface PredictionResult {
-  churn_probability: number;   // e.g. 73.4
-  risk_level: string;          // 'Low', 'Medium', or 'High'
-  explanation: string;         // GPT-generated plain English explanation
+  churn_probability: number;
+  risk_level: string;
+  explanation: string;
 }
 
-// @Injectable makes this service available throughout the app
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PredictService {
 
-  // The Flask API URL — change this to your Heroku URL when deploying
   private apiUrl = 'https://churn-predictor-716z.onrender.com';
 
-  // HttpClient is injected automatically by Angular — we use it to make API calls
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
-  // predict() sends customer data to Flask and returns the prediction
-  // Observable<PredictionResult> means: "this will eventually return a PredictionResult"
   predict(customerData: any): Observable<PredictionResult> {
-    return this.http.post<PredictionResult>(`${this.apiUrl}/predict`, customerData);
+    const payload = { ...customerData, user_id: this.userService.getUserId() };
+    return this.http.post<PredictionResult>(`${this.apiUrl}/predict`, payload);
+  }
+
+  getHistory(): Observable<any[]> {
+    const uid = this.userService.getUserId();
+    return this.http.get<any[]>(`${this.apiUrl}/history?user_id=${uid}`);
   }
 
   deleteRecord(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/history/${id}`);
+    const uid = this.userService.getUserId();
+    return this.http.delete(`${this.apiUrl}/history/${id}?user_id=${uid}`);
   }
 
   clearHistory(): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/history`);
+    const uid = this.userService.getUserId();
+    return this.http.delete(`${this.apiUrl}/history?user_id=${uid}`);
   }
 }
