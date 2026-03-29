@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["https://glowing-conkies-f6c9b6.netlify.app", "http://localhost:4200"])
+CORS(app, origins=["https://glowing-conkies-f6c9b6.netlify.app", "https://churn-predictor.pages.dev", "http://localhost:4200"])
 
 FEATURE_COLUMNS = [
     'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure',
