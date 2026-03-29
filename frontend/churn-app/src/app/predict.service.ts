@@ -1,9 +1,3 @@
-// ─────────────────────────────────────────────
-// predict.service.ts
-// This service is responsible for sending customer
-// data to the Flask API and returning the result
-// ─────────────────────────────────────────────
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
