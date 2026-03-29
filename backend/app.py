@@ -21,7 +21,7 @@ from sklearn.preprocessing import LabelEncoder  # Encode text columns in bulk CS
 load_dotenv()       # Reads the .env file and makes its values available via os.getenv()
 
 app = Flask(__name__)  # Creates the Flask app. __name__ tells Flask where to look for files.
-CORS(app)              # Enables Cross-Origin requests — Angular (port 4200) talking to Flask (port 5000)
+CORS(app, origins=["https://glowing-conkies-f6c9b6.netlify.app", "http://localhost:4200"])
 
 
 # ─────────────────────────────────────────────
