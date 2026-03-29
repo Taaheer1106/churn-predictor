@@ -1,0 +1,120 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: #f0f2f8;
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+* { box-sizing: border-box; }
+
+// ── DARK MODE ─────────────────────────────────
+body.dark-mode {
+  background-color: #0f1117 !important;
+  color: #e0e0e0 !important;
+
+  // Cards
+  .mat-mdc-card {
+    background-color: #1e2130 !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Form fields
+  .mat-mdc-form-field {
+    --mdc-outlined-text-field-label-text-color: #aaa;
+    --mdc-outlined-text-field-input-text-color: #e0e0e0;
+    --mdc-outlined-text-field-outline-color: #444;
+  }
+
+  // Select panels
+  .mat-mdc-select-value-text { color: #e0e0e0 !important; }
+  .mat-mdc-option { background: #1e2130 !important; color: #e0e0e0 !important; }
+  .mat-mdc-option:hover { background: #2a2f45 !important; }
+  .mat-select-panel { background: #1e2130 !important; }
+
+  // Section headers and text
+  h3, h4, p, span, label { color: inherit; }
+
+  // Section cards
+  .section-card .section-header h3 { color: #90caf9 !important; }
+  .section-card .section-header     { border-bottom-color: #2a2f45 !important; }
+
+  // Empty state
+  .empty-state {
+    background: #1e2130 !important;
+    h3 { color: #e0e0e0 !important; }
+    p  { color: #888 !important; }
+  }
+
+  // Result cards
+  .gauge-card, .risk-card, .explanation-card {
+    background: #1e2130 !important;
+    color: #e0e0e0 !important;
+  }
+
+  .explanation-card {
+    background: #1a2040 !important;
+    border-color: #2a3560 !important;
+
+    .explanation-text { color: #ccc !important; }
+    h4 { color: #90caf9 !important; }
+  }
+
+  // Table
+  .mat-mdc-table          { background: #1e2130 !important; }
+  .mat-mdc-header-cell    { background: #161a28 !important; color: #aaa !important; }
+  .mat-mdc-cell           { color: #e0e0e0 !important; border-bottom-color: #2a2f45 !important; }
+  tr.mat-mdc-row:hover td { background: #252a3d !important; }
+
+  // PDF button
+  .pdf-btn {
+    background: #1e2130 !important;
+    color: #90caf9 !important;
+    border-color: #90caf9 !important;
+    &:hover {
+      background: #90caf9 !important;
+      color: #0f1117 !important;
+    }
+  }
+
+  // Predict button stays same
+  .predict-btn { opacity: 0.95; }
+
+  // Page title text
+  .page-title-row .title-left h2 { color: #90caf9 !important; }
+  .page-title-row .title-left p  { color: #888 !important; }
+  .stat-card .stat-num    { color: #90caf9 !important; }
+  .stat-card .stat-number { color: #90caf9 !important; }
+
+  // Customer name in history table
+  .customer-name { color: #90caf9 !important; }
+
+  // Filter select in history
+  .filter-select .mat-mdc-text-field-wrapper { background: #1e2130 !important; }
+
+  // Input text
+  input { color: #e0e0e0 !important; }
+}
+/* You can add global styles to this file, and also import other style files */

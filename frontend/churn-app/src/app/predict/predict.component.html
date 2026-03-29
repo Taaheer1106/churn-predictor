@@ -1,0 +1,357 @@
+<!-- ANIMATED HERO SECTION -->
+<div class="hero">
+
+  <!-- Floating animated particles -->
+  <div class="particles">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Animated grid lines -->
+  <div class="grid-lines">
+    <div class="h-line"></div><div class="h-line"></div>
+    <div class="h-line"></div><div class="h-line"></div>
+    <div class="v-line"></div><div class="v-line"></div>
+    <div class="v-line"></div><div class="v-line"></div>
+    <div class="v-line"></div>
+  </div>
+
+  <!-- Hero content -->
+  <div class="hero-content">
+    <div class="hero-badge">🤖 AI-Powered Analytics</div>
+    <h1 class="hero-title">Customer Churn <span class="highlight">Predictor</span></h1>
+    <p class="hero-subtitle">
+      Use Machine Learning + AI to identify customers at risk of leaving —
+      before they do.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">7,032</span>
+        <span class="stat-desc">Training Records</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">82%</span>
+        <span class="stat-desc">AUC-ROC Score</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">19</span>
+        <span class="stat-desc">Features Analyzed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav inside hero -->
+  <div class="hero-nav">
+    <a mat-button routerLink="/" class="nav-link active">⚡ Predict</a>
+    <a mat-button routerLink="/history" class="nav-link">📋 History</a>
+    <a mat-button routerLink="/bulk" class="nav-link">📂 Bulk</a>
+    <button mat-icon-button class="theme-toggle" (click)="theme.toggle()" [title]="theme.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+      {{ theme.isDark() ? '☀️' : '🌙' }}
+    </button>
+  </div>
+
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- LEFT: FORM -->
+  <div class="form-panel">
+
+    <!-- DEMOGRAPHICS -->
+    <mat-card class="section-card">
+      <div class="section-header">
+        <span class="section-icon">👤</span>
+        <h3>Demographics</h3>
+      </div>
+      <form [formGroup]="form">
+        <div class="fields-grid">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Customer Name / ID (optional)</mat-label>
+            <input matInput type="text" formControlName="customer_name"
+                   placeholder="e.g. John Smith or CUST-00123" />
+            <mat-hint>Used for record-keeping only — does not affect prediction</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option [value]="1">Male</mat-option>
+              <mat-option [value]="0">Female</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Senior Citizen</mat-label>
+            <mat-select formControlName="SeniorCitizen">
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">Yes</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Partner</mat-label>
+            <mat-select formControlName="Partner">
+              <mat-option [value]="1">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Dependents</mat-label>
+            <mat-select formControlName="Dependents">
+              <mat-option [value]="1">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tenure (months)</mat-label>
+            <input matInput type="number" formControlName="tenure" placeholder="e.g. 12" />
+            <mat-hint>How long the customer has been subscribed</mat-hint>
+          </mat-form-field>
+
+        </div>
+      </form>
+    </mat-card>
+
+    <!-- SERVICES -->
+    <mat-card class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📡</span>
+        <h3>Services</h3>
+      </div>
+      <form [formGroup]="form">
+        <div class="fields-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Service</mat-label>
+            <mat-select formControlName="PhoneService">
+              <mat-option [value]="1">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Multiple Lines</mat-label>
+            <mat-select formControlName="MultipleLines">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No phone service</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Internet Service</mat-label>
+            <mat-select formControlName="InternetService">
+              <mat-option [value]="0">DSL</mat-option>
+              <mat-option [value]="1">Fiber optic</mat-option>
+              <mat-option [value]="2">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Online Security</mat-label>
+            <mat-select formControlName="OnlineSecurity">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No internet</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Online Backup</mat-label>
+            <mat-select formControlName="OnlineBackup">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No internet</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Device Protection</mat-label>
+            <mat-select formControlName="DeviceProtection">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No internet</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tech Support</mat-label>
+            <mat-select formControlName="TechSupport">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No internet</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Streaming TV</mat-label>
+            <mat-select formControlName="StreamingTV">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No internet</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Streaming Movies</mat-label>
+            <mat-select formControlName="StreamingMovies">
+              <mat-option [value]="2">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+              <mat-option [value]="1">No internet</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </form>
+    </mat-card>
+
+    <!-- BILLING -->
+    <mat-card class="section-card">
+      <div class="section-header">
+        <span class="section-icon">💳</span>
+        <h3>Billing</h3>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="fields-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Contract</mat-label>
+            <mat-select formControlName="Contract">
+              <mat-option [value]="0">Month-to-month</mat-option>
+              <mat-option [value]="1">One year</mat-option>
+              <mat-option [value]="2">Two year</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Paperless Billing</mat-label>
+            <mat-select formControlName="PaperlessBilling">
+              <mat-option [value]="1">Yes</mat-option>
+              <mat-option [value]="0">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Payment Method</mat-label>
+            <mat-select formControlName="PaymentMethod">
+              <mat-option [value]="2">Electronic check</mat-option>
+              <mat-option [value]="3">Mailed check</mat-option>
+              <mat-option [value]="1">Credit card (automatic)</mat-option>
+              <mat-option [value]="0">Bank transfer (automatic)</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Monthly Charges ($)</mat-label>
+            <input matInput type="number" formControlName="MonthlyCharges" placeholder="e.g. 65.50" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Total Charges ($)</mat-label>
+            <input matInput type="number" formControlName="TotalCharges" placeholder="e.g. 786.00" />
+          </mat-form-field>
+
+        </div>
+
+        <button mat-raised-button class="predict-btn" type="submit"
+          [disabled]="form.invalid || loading()" (click)="onSubmit()">
+          @if (loading()) {
+            <mat-spinner diameter="20" color="accent"></mat-spinner>
+            <span>Analyzing...</span>
+          } @else {
+            <span>⚡ Predict Churn</span>
+          }
+        </button>
+
+      </form>
+    </mat-card>
+
+  </div>
+
+  <!-- RIGHT: RESULT PANEL -->
+  <div class="result-panel">
+
+    @if (!result() && !loading()) {
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <h3>No Prediction Yet</h3>
+      <p>Fill in customer details and click <strong>Predict Churn</strong>.</p>
+    </div>
+    }
+
+    @if (errorMsg()) {
+    <mat-card class="error-card">
+      <span>⚠️</span>
+      <p>{{ errorMsg() }}</p>
+    </mat-card>
+    }
+
+    @if (result()) {
+    <div class="result-animate">
+
+      <!-- GAUGE CARD -->
+      <mat-card class="gauge-card" [style.border-top-color]="getRiskColor()">
+        <p class="gauge-title">Churn Probability</p>
+
+        <div class="simple-gauge">
+          <div class="gauge-percent-text" [style.color]="getRiskColor()">
+            {{ result()!.churn_probability }}%
+          </div>
+          <div class="gauge-sub-text">churn probability</div>
+          <div class="gauge-bar-track">
+            <div class="gauge-bar-fill"
+                 [style.width.%]="result()!.churn_probability"
+                 [style.background]="getRiskColor()">
+            </div>
+          </div>
+          <div class="gauge-bar-labels">
+            <span style="color:#4caf50">Low</span>
+            <span style="color:#ff9800">Medium</span>
+            <span style="color:#f44336">High</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- RISK BADGE -->
+      <mat-card class="risk-card" [style.border-left-color]="getRiskColor()">
+        <div class="risk-row">
+          <div>
+            <p class="risk-label">Risk Level</p>
+            <p class="risk-value" [style.color]="getRiskColor()">
+              {{ result()!.risk_level }} Risk
+            </p>
+          </div>
+          <div class="risk-icon" [style.color]="getRiskColor()">
+            @if (result()!.risk_level === 'Low')    { ✅ }
+            @if (result()!.risk_level === 'Medium') { ⚠️ }
+            @if (result()!.risk_level === 'High')   { 🚨 }
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- AI EXPLANATION -->
+      <mat-card class="explanation-card">
+        <div class="explanation-header">
+          <span>🤖</span>
+          <h4>AI Analysis</h4>
+        </div>
+        <p class="explanation-text">{{ result()!.explanation }}</p>
+      </mat-card>
+
+      <!-- DOWNLOAD PDF BUTTON -->
+      <button mat-raised-button class="pdf-btn" (click)="downloadPDF()">
+        📄 Download PDF Report
+      </button>
+
+    </div>
+    }
+
+  </div>
+</div>
