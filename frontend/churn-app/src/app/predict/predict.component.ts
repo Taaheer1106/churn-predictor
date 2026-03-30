@@ -200,7 +200,8 @@ export class PredictComponent {
     if (isMobile) {
       doc.output('dataurlnewwindow');
     } else {
-      doc.save(`churn_report_${Date.now()}.pdf`);
+      const name = (this.form.value.customer_name || '').trim().replace(/\s+/g, '_') || 'customer';
+      doc.save(`churn_report_${name}.pdf`);
     }
   }
 
