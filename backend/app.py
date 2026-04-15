@@ -4,15 +4,21 @@ from dotenv import load_dotenv
 import pickle
 import pandas as pd
 import os
-from openai import OpenAI
 from groq import Groq
 import psycopg2
+from psycopg2 import pool
 from sklearn.preprocessing import LabelEncoder
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins=["https://glowing-conkies-f6c9b6.netlify.app", "https://churn-predictor.pages.dev", "http://localhost:4200"])
+
+# Shared Groq client — created once at startup
+groq_client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+
+# DB connection pool — avoids opening a new connection on every request
+db_pool = pool.ThreadedConnectionPool(1, 10, os.getenv('DATABASE_URL'))
 
 FEATURE_COLUMNS = [
     'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure',
@@ -29,7 +35,11 @@ print("Model loaded.")
 
 
 def get_db_connection():
-    return psycopg2.connect(os.getenv('DATABASE_URL'))
+    return db_pool.getconn()
+
+
+def release_db_connection(conn):
+    db_pool.putconn(conn)
 
 
 def get_risk_level(probability):
@@ -61,7 +71,6 @@ def get_fallback_explanation(customer_data, probability, risk_level):
 
 
 def get_ai_explanation(customer_data, probability, risk_level):
-    client = Groq(api_key=os.getenv('GROQ_API_KEY'))
     prompt = f"""
 You are a customer retention analyst. A machine learning model predicted that a telecom customer
 has a {probability:.0%} chance of canceling their subscription (Risk Level: {risk_level}).
@@ -79,7 +88,7 @@ Write 2-3 sentences in plain English explaining WHY this customer might churn
 and ONE specific action the business can take to retain them.
 Keep it simple — no technical jargon.
 """
-    response = client.chat.completions.create(
+    response = groq_client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=150,
@@ -114,6 +123,7 @@ def validate_input(data):
 
 
 def save_prediction(data, probability, risk_level, explanation, customer_name=None, user_id=None):
+    conn = None
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -135,9 +145,11 @@ def save_prediction(data, probability, risk_level, explanation, customer_name=No
         ))
         conn.commit()
         cur.close()
-        conn.close()
     except Exception as e:
         print(f"Database error: {e}")
+    finally:
+        if conn:
+            release_db_connection(conn)
 
 
 @app.route('/predict', methods=['POST'])
@@ -219,6 +231,7 @@ def predict_bulk():
 
 @app.route('/history', methods=['GET'])
 def history():
+    conn = None
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -244,7 +257,6 @@ def history():
 
         rows = cur.fetchall()
         cur.close()
-        conn.close()
 
         predictions = []
         for row in rows:
@@ -265,10 +277,14 @@ def history():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    finally:
+        if conn:
+            release_db_connection(conn)
 
 
 @app.route('/history/<int:prediction_id>', methods=['DELETE'])
 def delete_prediction(prediction_id):
+    conn = None
     try:
         user_id = request.args.get('user_id')
         conn = get_db_connection()
@@ -279,14 +295,17 @@ def delete_prediction(prediction_id):
             cur.execute("DELETE FROM predictions WHERE id = %s", (prediction_id,))
         conn.commit()
         cur.close()
-        conn.close()
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    finally:
+        if conn:
+            release_db_connection(conn)
 
 
 @app.route('/history', methods=['DELETE'])
 def clear_history():
+    conn = None
     try:
         user_id = request.args.get('user_id')
         conn = get_db_connection()
@@ -297,10 +316,12 @@ def clear_history():
             cur.execute("DELETE FROM predictions")
         conn.commit()
         cur.close()
-        conn.close()
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    finally:
+        if conn:
+            release_db_connection(conn)
 
 
 if __name__ == '__main__':
