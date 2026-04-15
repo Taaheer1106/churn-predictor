@@ -76,7 +76,7 @@ export class PredictComponent {
         this.loading.set(false);
       },
       error: () => {
-        this.errorMsg.set('Failed to connect to the prediction server. Make sure Flask is running.');
+        this.errorMsg.set('The server is waking up — please wait a moment and try again.');
         this.loading.set(false);
       }
     });

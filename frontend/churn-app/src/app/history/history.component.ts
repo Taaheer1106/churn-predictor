@@ -75,7 +75,7 @@ export class HistoryComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        this.errorMessage = 'Could not load history. Make sure Flask is running.';
+        this.errorMessage = 'The server is waking up — please wait a moment and refresh.';
         this.loading = false;
         this.cdr.detectChanges();
       }
